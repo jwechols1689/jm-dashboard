@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Good Morning, John-Mark</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #000000;
+      --warm-gray: #a8a78c;
+      --cream: #e5e2d9;
+      --dark-teal: #324446;
+      --sage: #727e4e;
+      --off-white: #fbf8ef;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--off-white);
+      color: var(--black);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: var(--dark-teal);
+      padding: 2rem 2.5rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      border: 2px solid var(--warm-gray);
+      border-radius: 50%;
+      opacity: 0.25;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 220px; height: 220px;
+      border: 2px solid var(--warm-gray);
+      border-radius: 50%;
+      opacity: 0.18;
+    }
+    .header-inner { position: relative; z-index: 1; }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+    .greeting {
+      font-family: 'League Gothic', sans-serif;
+      font-size: 2.8rem;
+      color: var(--off-white);
+      letter-spacing: 0.02em;
+      line-height: 1;
+    }
+    .date-line {
+      font-size: 0.75rem;
+      color: var(--warm-gray);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+    .reading-progress {
+      text-align: right;
+    }
+    .reading-day {
+      font-family: 'League Gothic', sans-serif;
+      font-size: 2rem;
+      color: var(--sage);
+      line-height: 1;
+    }
+    .reading-label {
+      font-size: 0.7rem;
+      color: var(--warm-gray);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Capacity banner -- shown/hidden based on health check */
+    .capacity-banner {
+      display: none;
+      background: #7a3030;
+      color: var(--cream);
+      padding: 0.5rem 2.5rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+    .capacity-banner.show { display: block; }
+
+    /* Main grid */
+    .main { padding: 1.5rem 2rem 3rem; }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .grid-2-equal {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid-3, .grid-2, .grid-2-equal { grid-template-columns: 1fr; }
+    }
+
+    /* Cards */
+    .card {
+      background: #fff;
+      border: 1px solid var(--cream);
+      border-radius: 8px;
+      padding: 1.25rem;
+      position: relative;
+    }
+    .card-teal {
+      background: var(--dark-teal);
+      border-color: var(--dark-teal);
+    }
+    .card-sage {
+      background: var(--sage);
+      border-color: var(--sage);
+    }
+
+    .card-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+    }
+    .card-teal .card-label { color: var(--warm-gray); }
+    .card-sage .card-label { color: var(--cream); opacity: 0.75; }
+
+    .card-title {
+      font-family: 'League Gothic', sans-serif;
+      font-size: 1.3rem;
+      color: var(--black);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.02em;
+    }
+    .card-teal .card-title { color: var(--off-white); }
+    .card-sage .card-title { color: var(--off-white); }
+
+    .card-body {
+      font-size: 0.82rem;
+      color: #555;
+      line-height: 1.65;
+    }
+    .card-teal .card-body { color: var(--cream); }
+    .card-sage .card-body { color: var(--cream); }
+
+    /* Weather card */
+    .weather-temp {
+      font-family: 'League Gothic', sans-serif;
+      font-size: 3.2rem;
+      color: var(--dark-teal);
+      line-height: 1;
+    }
+    .weather-desc {
+      font-size: 0.82rem;
+      color: #666;
+      margin: 0.25rem 0;
+    }
+    .weather-row {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 0.25rem;
+    }
+    .dress-badge {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      background: var(--sage);
+      color: var(--off-white);
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Scripture / Reading card */
+    .reading-refs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.75rem;
+    }
+    .ref-chip {
+      padding: 0.2rem 0.6rem;
+      background: var(--off-white);
+      border: 1px solid var(--cream);
+      border-radius: 3px;
+      font-size: 0.72rem;
+      color: var(--dark-teal);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .ref-chip:hover { background: var(--cream); }
+
+    /* Spurgeon card */
+    .spurgeon-text {
+      font-family: 'Poppins', sans-serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--cream);
+      line-height: 1.75;
+      margin-bottom: 0.75rem;
+    }
+    .spurgeon-key-verse {
+      font-size: 0.72rem;
+      color: var(--warm-gray);
+      letter-spacing: 0.06em;
+    }
+    .spurgeon-link {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-size: 0.72rem;
+      color: var(--warm-gray);
+      text-decoration: underline;
+    }
+
+    /* Calendar */
+    .event-item {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--cream);
+    }
+    .event-item:last-child { border-bottom: none; }
+    .event-time {
+      font-size: 0.7rem;
+      color: var(--warm-gray);
+      min-width: 52px;
+      padding-top: 2px;
+      font-weight: 500;
+    }
+    .event-name {
+      font-size: 0.82rem;
+      color: var(--black);
+      font-weight: 500;
+    }
+    .event-sub {
+      font-size: 0.72rem;
+      color: #888;
+    }
+    .event-dress {
+      font-size: 0.65rem;
+      color: var(--sage);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Tasks */
+    .task-item {
+      display: flex;
+      gap: 0.6rem;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--cream);
+      align-items: flex-start;
+    }
+    .task-item:last-child { border-bottom: none; }
+    .task-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .dot-high { background: #c0392b; }
+    .dot-med { background: var(--warm-gray); }
+    .dot-low { background: var(--sage); }
+    .task-name { font-size: 0.82rem; color: var(--black); }
+    .task-meta { font-size: 0.7rem; color: #999; }
+
+    /* Prayer */
+    .prayer-item {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      font-size: 0.82rem;
+      color: var(--cream);
+    }
+    .prayer-item:last-child { border-bottom: none; }
+    .prayer-cat {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin-bottom: 0.15rem;
+    }
+
+    /* Health */
+    .health-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .health-stat {
+      text-align: center;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+    }
+    .health-val {
+      font-family: 'League Gothic', sans-serif;
+      font-size: 1.6rem;
+      color: var(--off-white);
+      line-height: 1;
+    }
+    .health-lbl {
+      font-size: 0.62rem;
+      color: var(--warm-gray);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .checkin-btn {
+      margin-top: 0.75rem;
+      width: 100%;
+      padding: 0.5rem;
+      background: transparent;
+      border: 1px solid var(--warm-gray);
+      color: var(--cream);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .checkin-btn:hover { background: rgba(255,255,255,0.08); }
+
+    /* Section dividers */
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--warm-gray);
+      margin: 1.5rem 0 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--cream);
+    }
+
+    /* Loading states */
+    .loading { color: #aaa; font-size: 0.8rem; font-style: italic; }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.7rem;
+      color: var(--warm-gray);
+      letter-spacing: 0.08em;
+      border-top: 1px solid var(--cream);
+    }
+    .footer strong { color: var(--sage); }
+
+    /* Refresh button */
+    .refresh-btn {
+      background: none;
+      border: none;
+      color: var(--warm-gray);
+      font-size: 0.7rem;
+      cursor: pointer;
+      text-decoration: underline;
+      font-family: 'Poppins', sans-serif;
+      margin-top: 0.5rem;
+    }
+
+    /* Coram Deo mark */
+    .coram-deo {
+      font-family: 'League Gothic', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      color: var(--warm-gray);
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div>
+        <div class="greeting" id="greeting">Good Morning, John-Mark</div>
+        <div class="date-line" id="date-line">Loading date...</div>
+      </div>
+      <div class="reading-progress">
+        <div class="reading-day" id="reading-day-num">--</div>
+        <div class="reading-label">of 730 days</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="capacity-banner" id="capacity-banner">
+  Low capacity day. Your COO has been notified. Prioritize rest and light tasks.
+</div>
+
+<div class="main">
+
+  <!-- Row 1: Weather | Reading | Health -->
+  <div class="grid-3">
+
+    <div class="card">
+      <div class="card-label">Midland, Texas</div>
+      <div class="weather-temp" id="weather-temp">--°</div>
+      <div class="weather-desc" id="weather-desc">Loading weather...</div>
+      <div class="weather-row">
+        <span id="weather-hi">H: --°</span>
+        <span id="weather-lo">L: --°</span>
+        <span id="weather-wind">Wind: --</span>
+      </div>
+      <div class="dress-badge" id="dress-rec">Loading...</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Today's Reading</div>
+      <div class="reading-refs" id="reading-refs">
+        <span class="loading">Loading plan...</span>
+      </div>
+      <div class="card-body" id="reading-summary"></div>
+    </div>
+
+    <div class="card card-teal">
+      <div class="card-label">Health Check-In</div>
+      <div class="card-body" id="garmin-summary">Syncing from Garmin...</div>
+      <div class="health-grid" id="health-grid" style="display:none;">
+        <div class="health-stat">
+          <div class="health-val" id="h-energy">--</div>
+          <div class="health-lbl">Body Battery</div>
+        </div>
+        <div class="health-stat">
+          <div class="health-val" id="h-sleep">--</div>
+          <div class="health-lbl">Sleep hrs</div>
+        </div>
+        <div class="health-stat">
+          <div class="health-val" id="h-stress">--</div>
+          <div class="health-lbl">Stress</div>
+        </div>
+      </div>
+      <button class="checkin-btn" onclick="runHealthCheckin()">Run Morning Check-In</button>
+    </div>
+
+  </div>
+
+  <!-- Row 2: Spurgeon (full) | Prayer Focus -->
+  <div class="grid-2">
+
+    <div class="card card-teal">
+      <div class="card-label">Spurgeon's Morning Devotional</div>
+      <div class="card-title" id="spurgeon-title">Loading...</div>
+      <div class="spurgeon-key-verse" id="spurgeon-verse" style="margin-bottom:0.75rem;"></div>
+      <div class="spurgeon-text" id="spurgeon-text">Fetching today's reading from Morning and Evening...</div>
+      <a id="spurgeon-link" class="spurgeon-link" href="https://www.ccel.org/ccel/spurgeon/morneve.today.html" target="_blank">Read full devotional at CCEL</a>
+    </div>
+
+    <div class="card card-sage">
+      <div class="card-label">Prayer Focus</div>
+      <div class="card-title" style="margin-bottom:0.75rem;" id="prayer-title">This Week's Intercessions</div>
+      <div id="prayer-list">
+        <div class="loading" style="color:var(--cream);">Loading prayer requests...</div>
+      </div>
+      <button class="refresh-btn" style="color:var(--cream);margin-top:0.75rem;" onclick="loadPrayer()">Refresh from Echo</button>
+    </div>
+
+  </div>
+
+  <!-- Row 3: Calendar | Tasks -->
+  <div class="grid-2">
+
+    <div class="card">
+      <div class="card-label">Today's Calendar</div>
+      <div id="calendar-list">
+        <div class="loading">Loading events from Google Calendar...</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Priority Tasks</div>
+      <div id="tasks-list">
+        <div class="loading">Loading from Asana...</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Row 4: Family Devotion preview (Mon only or always) -->
+  <div id="family-devotion-row" style="display:none;">
+    <p class="section-label">Family Devotion This Week</p>
+    <div class="grid-2-equal" id="family-grid"></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="coram-deo">Coram Deo</div>
+  <div style="margin-top:0.4rem;">Last updated: <span id="last-updated">--</span></div>
+  <button class="refresh-btn" onclick="loadAll()">Refresh all data</button>
+</div>
+
+<script>
+// ─── DATE & GREETING ─────────────────────────────────────────────
+const PLAN_START = new Date('2026-01-01');
+const WEEKDAYS = [0,2,3,4,5,6]; // Sun=skip, Mon-Fri=read, Sat=read (plan is Mon-Fri only -- 2,3,4,5,6 = Mon-Fri)
+
+// Reading plan data -- weekdays only, Jan 1 2026 start
+// Format: "YYYY-MM-DD": "Reading references"
+const READING_PLAN = {
+  "2026-01-01":"Gen 1; Luk 1; Ps 1","2026-01-02":"Gen 2; Ps 2",
+  "2026-01-05":"Gen 3-4; Ps 3","2026-01-06":"Gen 5; John 1; Ps 4",
+  "2026-01-07":"Gen 6-7; Ps 5","2026-01-08":"Gen 8; Mat 1; Ps 6",
+  "2026-01-09":"Gen 9-10; Ps 7","2026-01-12":"Gen 11; Luk 2; Ps 8",
+  "2026-01-13":"Job 1-2; Ps 9","2026-01-14":"Job 3; Mat 2; Ps 10",
+  "2026-01-15":"Job 4-5; Ps 11","2026-01-16":"Job 6; Mat 3; Ps 12",
+  "2026-01-19":"Job 7-8; Ps 13","2026-01-20":"Job 9; Mk 1; Ps 14",
+  "2026-01-21":"Job 10-11; Ps 15","2026-01-22":"Job 12; Luk 3; Ps 16",
+  "2026-01-23":"Job 13-14; Ps 17","2026-01-26":"Job 15; Mat 4; Ps 18",
+  "2026-01-27":"Job 16-17; Ps 19","2026-01-28":"Job 18; Luk 4; Ps 20",
+  "2026-01-29":"Job 19-20; Ps 21","2026-01-30":"Job 21; Luk 5; Ps 22",
+  "2026-02-02":"Job 22-23; Ps 23","2026-02-03":"Job 24; John 2; Ps 24",
+  "2026-02-04":"Job 25-26; Ps 25","2026-02-05":"Job 27; John 3; Ps 26",
+  "2026-02-06":"Job 28-29; Ps 27","2026-02-09":"Job 30; John 4; Ps 28",
+  "2026-02-10":"Job 31-32; Ps 29","2026-02-11":"Job 33; Mat 8; Ps 30",
+  "2026-02-12":"Job 34-35; Ps 31","2026-02-13":"Job 36; Mk 2; Ps 32",
+  "2026-02-16":"Job 37-38; Ps 33","2026-02-17":"Job 39; John 5; Ps 34",
+  "2026-02-18":"Job 40-41; Ps 35","2026-02-19":"Job 42; Mat 12; Ps 36",
+  "2026-02-20":"Gen 12-13; Ps 37","2026-02-23":"Gen 14; Mk 3; Ps 38",
+  "2026-02-24":"Gen 15-16; Ps 39","2026-02-25":"Gen 17; Luk 6; Ps 40",
+  "2026-02-26":"Gen 18-19; Ps 41","2026-02-27":"Gen 20; Mat 5; Ps 42",
+  "2026-03-02":"Gen 21-22; Ps 43","2026-03-03":"Gen 23; Mat 6; Ps 44",
+  "2026-03-04":"Gen 24-25; Ps 45","2026-03-05":"Gen 26; Mat 7; Ps 46",
+  "2026-03-06":"Gen 27-28; Ps 47","2026-03-09":"Gen 29; Mat 9; Ps 48",
+  "2026-03-10":"Gen 30-31; Ps 49","2026-03-11":"Gen 32; Luk 7; Ps 50",
+  "2026-03-12":"Gen 33-34; Ps 51","2026-03-13":"Gen 35; Mat 11; Ps 52",
+  "2026-03-16":"Gen 36-37; Ps 53","2026-03-17":"Gen 38; Luk 11; Ps 54",
+  "2026-03-18":"Gen 39-40; Ps 55","2026-03-19":"Gen 41; Mat 13; Ps 56",
+  "2026-03-20":"Gen 42-43; Ps 57","2026-03-23":"Gen 44; Luk 8; Ps 58",
+  "2026-03-24":"Gen 45-46; Ps 59","2026-03-25":"Gen 47; Mk 4; Ps 60",
+  "2026-03-26":"Gen 48-49; Ps 61","2026-03-27":"Gen 50; Mk 5; Ps 62",
+  "2026-03-30":"Ex 1-2; Ps 63","2026-03-31":"Ex 3; Mat 10; Ps 64",
+  "2026-04-01":"Ex 4-5; Ps 65","2026-04-02":"Ex 6; Mat 14; Ps 66",
+  "2026-04-03":"Ex 7; Ps 67","2026-04-06":"Ex 8-9; Mk 6; Ps 68",
+  "2026-04-07":"Ex 10; Ps 69","2026-04-08":"Ex 11-12; Luk 9; Ps 70",
+  "2026-04-09":"Ex 13; Ps 71","2026-04-10":"Ex 14-15; John 6; Ps 72",
+  "2026-04-13":"Ex 16; Ps 73","2026-04-14":"Ex 17-18; Mat 15; Ps 74",
+  "2026-04-15":"Ex 19; Ps 75","2026-04-16":"Ex 20-21; Mk 7; Ps 76",
+  "2026-04-17":"Ex 22; Ps 77","2026-04-20":"Ex 23-24; Mat 16; Ps 78",
+  "2026-04-21":"Ex 25; Ps 79","2026-04-22":"Ex 26-27; Mk 8; Ps 80",
+  "2026-04-23":"Ex 28; Ps 81","2026-04-24":"Ex 29-30; Mat 17; Ps 82",
+  "2026-04-27":"Ex 31; Ps 83","2026-04-28":"Ex 32-33; Mk 9; Ps 84",
+  "2026-04-29":"Ex 34; Ps 85","2026-04-30":"Ex 35-36; Mat 18; Ps 86",
+  "2026-05-01":"Ex 37; Ps 87","2026-05-04":"Ex 38-39; John 7; Ps 88",
+  "2026-05-05":"Ex 40; Ps 89","2026-05-06":"Lev 1-2; John 8; Ps 90",
+  "2026-05-07":"Lev 3; Ps 91","2026-05-08":"Lev 4-5; John 9; Ps 92"
+};
+
+function todayKey() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+
+function countReadingDays() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  let count = 0;
+  const cur = new Date(PLAN_START);
+  while (cur <= today) {
+    const dow = cur.getDay();
+    if (dow >= 1 && dow <= 5) count++;
+    cur.setDate(cur.getDate()+1);
+  }
+  return count;
+}
+
+function setDateAndGreeting() {
+  const now = new Date();
+  const hour = now.getHours();
+  let greet = 'Good Morning';
+  if (hour >= 12 && hour < 17) greet = 'Good Afternoon';
+  else if (hour >= 17) greet = 'Good Evening';
+  document.getElementById('greeting').textContent = `${greet}, John-Mark`;
+
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const line = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+  document.getElementById('date-line').textContent = line;
+
+  document.getElementById('reading-day-num').textContent = countReadingDays();
+  document.getElementById('last-updated').textContent = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+
+// ─── BIBLE READING PLAN ──────────────────────────────────────────
+function buildBLBUrl(ref) {
+  // Convert "Ex 13" -> BLB search in NASB95
+  const clean = ref.trim().replace(/\s+/g,' ');
+  return `https://www.blueletterbible.org/nasb95/${encodeURIComponent(clean)}/1/`;
+}
+
+function loadReadingPlan() {
+  const key = todayKey();
+  const refs = READING_PLAN[key];
+  const container = document.getElementById('reading-refs');
+  const summary = document.getElementById('reading-summary');
+
+  if (!refs) {
+    const dow = new Date().getDay();
+    if (dow === 0 || dow === 6) {
+      container.innerHTML = '<span style="color:#888;font-size:0.8rem;font-style:italic;">Weekend rest day. No assigned reading.</span>';
+      summary.textContent = 'The Sabbath is a gift. Rest in the Lord.';
+    } else {
+      container.innerHTML = '<span style="color:#888;font-size:0.8rem;">Reading not found for today.</span>';
+    }
+    return;
+  }
+
+  const parts = refs.split(';').map(r => r.trim()).filter(Boolean);
+  container.innerHTML = parts.map(r =>
+    `<a class="ref-chip" href="${buildBLBUrl(r)}" target="_blank">${r}</a>`
+  ).join('');
+  summary.textContent = `${parts.length} reading${parts.length>1?'s':''} today. Open in Blue Letter Bible (NASB95).`;
+}
+
+// ─── WEATHER ─────────────────────────────────────────────────────
+async function loadWeather() {
+  try {
+    const res = await fetch('/.netlify/functions/weather');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    document.getElementById('weather-temp').textContent = `${Math.round(data.temp)}°`;
+    document.getElementById('weather-desc').textContent = data.description;
+    document.getElementById('weather-hi').textContent = `H: ${Math.round(data.high)}°`;
+    document.getElementById('weather-lo').textContent = `L: ${Math.round(data.low)}°`;
+    document.getElementById('weather-wind').textContent = `Wind: ${data.wind} mph`;
+    document.getElementById('dress-rec').textContent = data.dressRec;
+  } catch(e) {
+    document.getElementById('weather-temp').textContent = '--°';
+    document.getElementById('weather-desc').textContent = 'Weather unavailable';
+    document.getElementById('dress-rec').textContent = 'Check calendar for dress';
+  }
+}
+
+// ─── SPURGEON ────────────────────────────────────────────────────
+async function loadSpurgeon() {
+  try {
+    const res = await fetch('/.netlify/functions/spurgeon');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    document.getElementById('spurgeon-title').textContent = data.title || 'Morning Devotional';
+    document.getElementById('spurgeon-verse').textContent = data.keyVerse || '';
+    document.getElementById('spurgeon-text').textContent = data.text || '';
+  } catch(e) {
+    document.getElementById('spurgeon-title').textContent = 'Morning and Evening';
+    document.getElementById('spurgeon-text').textContent =
+      'Visit ccel.org/ccel/spurgeon/morneve.today.html for today\'s full devotional.';
+  }
+}
+
+// ─── GARMIN HEALTH ───────────────────────────────────────────────
+async function loadHealth() {
+  try {
+    const res = await fetch('/.netlify/functions/garmin');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    document.getElementById('garmin-summary').style.display = 'none';
+    document.getElementById('health-grid').style.display = 'grid';
+    document.getElementById('h-energy').textContent = data.bodyBattery || '--';
+    document.getElementById('h-sleep').textContent = data.sleepHours ? data.sleepHours.toFixed(1) : '--';
+    document.getElementById('h-stress').textContent = data.avgStress || '--';
+
+    // Low capacity check
+    if (data.bodyBattery && data.bodyBattery < 30) {
+      document.getElementById('capacity-banner').classList.add('show');
+    }
+  } catch(e) {
+    document.getElementById('garmin-summary').textContent = 'Garmin data unavailable. Manual check-in below.';
+  }
+}
+
+function runHealthCheckin() {
+  window.open('/.netlify/functions/health-checkin', '_blank');
+}
+
+// ─── CALENDAR ────────────────────────────────────────────────────
+async function loadCalendar() {
+  try {
+    const res = await fetch('/.netlify/functions/calendar');
+    const data = await res.json();
+    const list = document.getElementById('calendar-list');
+
+    if (!data.events || data.events.length === 0) {
+      list.innerHTML = '<div class="card-body" style="color:#aaa;font-style:italic;">No events today. A clear day.</div>';
+      return;
+    }
+
+    list.innerHTML = data.events.map(ev => `
+      <div class="event-item">
+        <div class="event-time">${ev.time}</div>
+        <div>
+          <div class="event-name">${ev.title}</div>
+          ${ev.location ? `<div class="event-sub">${ev.location}</div>` : ''}
+          ${ev.dressNote ? `<div class="event-dress">${ev.dressNote}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    document.getElementById('calendar-list').innerHTML =
+      '<div class="loading">Calendar unavailable. Check Google Calendar directly.</div>';
+  }
+}
+
+// ─── ASANA TASKS ─────────────────────────────────────────────────
+async function loadTasks() {
+  try {
+    const res = await fetch('/.netlify/functions/tasks');
+    const data = await res.json();
+    const list = document.getElementById('tasks-list');
+
+    if (!data.tasks || data.tasks.length === 0) {
+      list.innerHTML = '<div class="card-body" style="color:#aaa;font-style:italic;">No priority tasks today.</div>';
+      return;
+    }
+
+    list.innerHTML = data.tasks.slice(0,6).map(t => `
+      <div class="task-item">
+        <div class="task-dot dot-${t.priority || 'med'}"></div>
+        <div>
+          <div class="task-name">${t.name}</div>
+          <div class="task-meta">${t.project || ''} ${t.due ? '· Due '+t.due : ''}</div>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    document.getElementById('tasks-list').innerHTML =
+      '<div class="loading">Tasks unavailable. Check Asana directly.</div>';
+  }
+}
+
+// ─── PRAYER ──────────────────────────────────────────────────────
+async function loadPrayer() {
+  try {
+    const res = await fetch('/.netlify/functions/prayer');
+    const data = await res.json();
+    const list = document.getElementById('prayer-list');
+    const title = document.getElementById('prayer-title');
+
+    if (!data.items || data.items.length === 0) {
+      list.innerHTML = '<div style="color:var(--cream);font-style:italic;font-size:0.8rem;">No prayer requests found. Check Echo directly.</div>';
+      return;
+    }
+
+    title.textContent = data.weekLabel || "This Week's Intercessions";
+    list.innerHTML = data.items.slice(0,6).map(p => `
+      <div class="prayer-item">
+        <div class="prayer-cat">${p.category || 'Prayer'}</div>
+        <div>${p.request}</div>
+      </div>
+    `).join('');
+  } catch(e) {
+    document.getElementById('prayer-list').innerHTML =
+      '<div style="color:var(--cream);font-style:italic;font-size:0.8rem;">Prayer feed unavailable.</div>';
+  }
+}
+
+// ─── LOAD ALL ─────────────────────────────────────────────────────
+async function loadAll() {
+  setDateAndGreeting();
+  loadReadingPlan();
+  await Promise.allSettled([
+    loadWeather(),
+    loadSpurgeon(),
+    loadHealth(),
+    loadCalendar(),
+    loadTasks(),
+    loadPrayer()
+  ]);
+  document.getElementById('last-updated').textContent = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+}
+
+loadAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["netlify/functions/**"]
+
+# Scheduled function -- morning SMS delivery
+# Runs weekdays at 6:30 AM Central (12:30 UTC)
+[[plugins]]
+
+[dev]
+  publish = "public"
+  functions = "netlify/functions"
+  port = 8888
