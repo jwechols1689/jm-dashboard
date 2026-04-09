@@ -1,91 +1,43 @@
-// Spurgeon Morning and Evening -- fetches from CCEL today URL
-// Falls back to a direct date URL if needed
-
 exports.handler = async (event, context) => {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'application/json'
-  };
-
+  const headers = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
   try {
     const res = await fetch('https://www.ccel.org/ccel/spurgeon/morneve.today.html', {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; TFE-Dashboard/1.0)' }
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36', 'Accept': 'text/html' }
     });
     const html = await res.text();
-
-    // Parse the relevant content from CCEL's HTML
-    const parsed = parseSpurgeon(html);
-
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify(parsed)
-    };
+    return { statusCode: 200, headers, body: JSON.stringify(parseSpurgeon(html)) };
   } catch (err) {
-    console.error('Spurgeon error:', err);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({
-        error: err.message,
-        title: 'Morning and Evening',
-        text: 'Visit ccel.org for today\'s devotional.',
-        keyVerse: ''
-      })
-    };
+    return { statusCode: 200, headers, body: JSON.stringify({ title: 'Morning and Evening', keyVerse: '', text: 'Visit ccel.org for today\'s Spurgeon devotional.' }) };
   }
 };
 
+function stripTags(h) {
+  return h.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/\s+/g,' ').trim();
+}
+
 function parseSpurgeon(html) {
-  // Extract the morning reading section
-  // CCEL structure: h2 with "Morning, [Date]", then key verse in blockquote/italic, then body text
+  const mMatch = html.match(/Morning,\s+\w+\s+\d+/i);
+  if (!mMatch) return { title:'Morning and Evening', keyVerse:'', text:'Visit ccel.org for today\'s devotional.' };
+  const mIdx = html.indexOf(mMatch[0]);
+  const eIdx = html.indexOf('Go To Evening', mIdx);
+  const section = html.substring(mIdx, eIdx > mIdx ? eIdx : mIdx + 8000);
+  const title = mMatch[0].trim();
 
-  let title = 'Morning Devotional';
   let keyVerse = '';
-  let text = '';
+  const vMatch = section.match(/[\u201c\u201d"]([^\u201c\u201d"]{10,100})[\u201c\u201d"]/);
+  if (vMatch) keyVerse = '\u201c' + vMatch[1].trim() + '\u201d';
 
-  // Extract h2 title (e.g. "Morning, April 9")
-  const h2Match = html.match(/<h2[^>]*>\s*Morning,[^<]+<\/h2>/i);
-  if (h2Match) {
-    title = h2Match[0].replace(/<[^>]+>/g, '').trim();
+  let text = stripTags(section);
+  text = text.replace(/Morning,\s+\w+\s+\d+/i,'').trim();
+  text = text.replace(/Go To (Morning|Evening) Reading/gi,'').trim();
+  text = text.replace(/Please login or register[\s\S]*/gi,'').trim();
+  text = text.replace(/\u00ab\s*Prev|\bNext\s*\u00bb/g,'').trim();
+  if (keyVerse) {
+    const kv = keyVerse.replace(/[\u201c\u201d]/g,'').substring(0,25);
+    const ki = text.indexOf(kv);
+    if (ki >= 0 && ki < 300) { const pe = text.indexOf('.',ki); if(pe>0) text = text.substring(pe+1).trim(); }
   }
-
-  // Extract key verse -- usually in an em or italic tag near the top of the reading
-  const verseMatch = html.match(/<em[^>]*>[""]([^"]+)[""]<\/em>/i) ||
-                     html.match(/<i[^>]*>[""]([^"]+)[""]<\/i>/i) ||
-                     html.match(/[""]([^"""]{5,80})[""][\s\S]{0,30}<\/em>/i);
-  if (verseMatch) {
-    keyVerse = '"' + verseMatch[1].trim() + '"';
-  }
-
-  // Extract body paragraphs -- everything between the verse and the nav links
-  // Remove all HTML tags and get clean text
-  const bodySection = html
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[\s\S]*?<\/style>/gi, '')
-    .replace(/<nav[\s\S]*?<\/nav>/gi, '')
-    .replace(/<header[\s\S]*?<\/header>/gi, '')
-    .replace(/<footer[\s\S]*?<\/footer>/gi, '');
-
-  // Find content between Morning heading and the nav links
-  const contentMatch = bodySection.match(/Morning,\s+\w+\s+\d+[\s\S]*?(?=Go To Evening|Next|Prev|login|register)/i);
-  if (contentMatch) {
-    text = contentMatch[0]
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .replace(/Morning,\s+\w+\s+\d+/i, '')
-      .replace(/[""].*?[""]/, '') // remove key verse from body
-      .trim();
-
-    // Limit to reasonable length for dashboard display
-    if (text.length > 1200) {
-      text = text.substring(0, 1200).replace(/\s\S+$/, '') + '...';
-    }
-  }
-
-  if (!text) {
-    text = 'Visit CCEL for today\'s full Morning and Evening reading by C.H. Spurgeon.';
-  }
-
+  if (text.length > 1400) text = text.substring(0,1400).replace(/\s\S+$/,'') + '...';
+  if (!text || text.length < 50) return { title, keyVerse, text:'Visit ccel.org for today\'s devotional.' };
   return { title, keyVerse, text };
 }
