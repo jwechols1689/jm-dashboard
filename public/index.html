@@ -2,352 +2,296 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Good Morning, John-Mark</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --black: #000000;
-      --warm-gray: #a8a78c;
-      --cream: #e5e2d9;
-      --dark-teal: #324446;
-      --sage: #727e4e;
+      --teal: #324446;
+      --olive: #6b7c3a;
+      --tan: #c4a882;
+      --brown: #6b4c2a;
+      --cream: #f5f0e8;
       --off-white: #fbf8ef;
+      --warm-gray: #a8a78c;
+      --text-dark: #1a1a1a;
+      --text-mid: #555;
+      --text-light: #888;
+      --border: #e8e2d6;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: 'Poppins', sans-serif;
-      background: var(--off-white);
-      color: var(--black);
+      background: var(--cream);
+      color: var(--text-dark);
       min-height: 100vh;
+      font-size: 16px;
     }
 
-    /* Header */
+    /* ── HEADER ── */
     .header {
-      background: var(--dark-teal);
-      padding: 2rem 2.5rem 1.5rem;
+      background: var(--teal);
+      padding: 1.5rem 1.25rem 1.25rem;
       position: relative;
       overflow: hidden;
     }
     .header::before {
       content: '';
       position: absolute;
-      top: -60px; right: -60px;
-      width: 200px; height: 200px;
-      border: 2px solid var(--warm-gray);
+      top: -50px; right: -50px;
+      width: 180px; height: 180px;
+      border: 1.5px solid var(--tan);
       border-radius: 50%;
-      opacity: 0.25;
+      opacity: 0.2;
     }
     .header::after {
       content: '';
       position: absolute;
-      bottom: -80px; left: -40px;
-      width: 220px; height: 220px;
-      border: 2px solid var(--warm-gray);
+      bottom: -70px; left: -30px;
+      width: 200px; height: 200px;
+      border: 1.5px solid var(--tan);
       border-radius: 50%;
-      opacity: 0.18;
+      opacity: 0.15;
     }
     .header-inner { position: relative; z-index: 1; }
-    .header-top {
+    .logo-wrap {
+      text-align: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(196,168,130,0.25);
+    }
+    .logo-wrap img {
+      height: 56px;
+      width: auto;
+    }
+    .header-bottom {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.75rem;
+      align-items: flex-end;
     }
     .greeting {
       font-family: 'League Gothic', sans-serif;
-      font-size: 2.8rem;
+      font-size: clamp(1.8rem, 6vw, 2.6rem);
       color: var(--off-white);
       letter-spacing: 0.02em;
       line-height: 1;
     }
     .date-line {
-      font-size: 0.75rem;
-      color: var(--warm-gray);
+      font-size: 0.7rem;
+      color: var(--tan);
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      margin-top: 0.4rem;
+      margin-top: 0.3rem;
     }
-    .reading-progress {
+    .reading-badge {
       text-align: right;
     }
-    .reading-day {
+    .reading-num {
       font-family: 'League Gothic', sans-serif;
-      font-size: 2rem;
-      color: var(--sage);
+      font-size: 1.8rem;
+      color: var(--tan);
       line-height: 1;
     }
-    .reading-label {
-      font-size: 0.7rem;
+    .reading-lbl {
+      font-size: 0.62rem;
       color: var(--warm-gray);
       letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
-    /* Capacity banner -- shown/hidden based on health check */
+    /* ── CAPACITY BANNER ── */
     .capacity-banner {
       display: none;
       background: #7a3030;
-      color: var(--cream);
-      padding: 0.5rem 2.5rem;
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
+      color: #fde8e8;
+      padding: 0.6rem 1.25rem;
+      font-size: 0.78rem;
+      text-align: center;
     }
     .capacity-banner.show { display: block; }
 
-    /* Main grid */
-    .main { padding: 1.5rem 2rem 3rem; }
+    /* ── MAIN ── */
+    .main { padding: 1rem 1rem 3rem; }
 
+    /* ── GRID ── */
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin-bottom: 1rem;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
     }
     .grid-2 {
       display: grid;
       grid-template-columns: 1.5fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1rem;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
     }
     .grid-2-equal {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1rem;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    @media (max-width: 700px) {
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .grid-2-equal { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 900px) {
-      .grid-3, .grid-2, .grid-2-equal { grid-template-columns: 1fr; }
-    }
-
-    /* Cards */
+    /* ── CARDS ── */
     .card {
       background: #fff;
-      border: 1px solid var(--cream);
-      border-radius: 8px;
-      padding: 1.25rem;
-      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
     }
-    .card-teal {
-      background: var(--dark-teal);
-      border-color: var(--dark-teal);
-    }
-    .card-sage {
-      background: var(--sage);
-      border-color: var(--sage);
-    }
+    .card-teal { background: var(--teal); border-color: var(--teal); }
+    .card-olive { background: var(--olive); border-color: var(--olive); }
+    .card-brown { background: var(--brown); border-color: var(--brown); }
 
     .card-label {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--warm-gray);
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.5rem;
       font-weight: 500;
     }
-    .card-teal .card-label { color: var(--warm-gray); }
-    .card-sage .card-label { color: var(--cream); opacity: 0.75; }
+    .card-teal .card-label { color: var(--tan); opacity: 0.8; }
+    .card-olive .card-label { color: var(--cream); opacity: 0.75; }
+    .card-brown .card-label { color: var(--tan); opacity: 0.8; }
 
     .card-title {
       font-family: 'League Gothic', sans-serif;
-      font-size: 1.3rem;
-      color: var(--black);
-      margin-bottom: 0.4rem;
+      font-size: 1.2rem;
       letter-spacing: 0.02em;
+      margin-bottom: 0.4rem;
     }
     .card-teal .card-title { color: var(--off-white); }
-    .card-sage .card-title { color: var(--off-white); }
+    .card-olive .card-title { color: var(--off-white); }
+    .card-brown .card-title { color: var(--off-white); }
 
     .card-body {
-      font-size: 0.82rem;
-      color: #555;
-      line-height: 1.65;
+      font-size: 0.8rem;
+      color: var(--text-mid);
+      line-height: 1.6;
     }
     .card-teal .card-body { color: var(--cream); }
-    .card-sage .card-body { color: var(--cream); }
+    .card-olive .card-body { color: var(--cream); }
+    .card-brown .card-body { color: var(--tan); }
 
-    /* Weather card */
+    /* ── WEATHER ── */
     .weather-temp {
       font-family: 'League Gothic', sans-serif;
-      font-size: 3.2rem;
-      color: var(--dark-teal);
+      font-size: 3rem;
+      color: var(--teal);
       line-height: 1;
     }
-    .weather-desc {
-      font-size: 0.82rem;
-      color: #666;
-      margin: 0.25rem 0;
-    }
-    .weather-row {
-      display: flex;
-      gap: 1rem;
-      font-size: 0.75rem;
-      color: #888;
-      margin-top: 0.25rem;
-    }
+    .weather-desc { font-size: 0.8rem; color: var(--text-mid); margin: 0.2rem 0; }
+    .weather-row { display: flex; gap: 1rem; font-size: 0.72rem; color: var(--text-light); }
     .dress-badge {
       display: inline-block;
-      margin-top: 0.75rem;
-      padding: 0.3rem 0.8rem;
-      background: var(--sage);
+      margin-top: 0.6rem;
+      padding: 0.25rem 0.75rem;
+      background: var(--olive);
       color: var(--off-white);
       border-radius: 4px;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 500;
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
-    /* Scripture / Reading card */
-    .reading-refs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 0.75rem;
-    }
+    /* ── READING ── */
+    .reading-refs { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.6rem; }
     .ref-chip {
-      padding: 0.2rem 0.6rem;
-      background: var(--off-white);
-      border: 1px solid var(--cream);
+      padding: 0.2rem 0.65rem;
+      background: var(--cream);
+      border: 1px solid var(--border);
       border-radius: 3px;
       font-size: 0.72rem;
-      color: var(--dark-teal);
+      color: var(--teal);
       text-decoration: none;
       font-weight: 500;
     }
-    .ref-chip:hover { background: var(--cream); }
+    .ref-chip:hover { background: var(--tan); color: #fff; }
 
-    /* Spurgeon card */
+    /* ── SPURGEON ── */
+    .spurgeon-verse {
+      font-size: 0.72rem;
+      color: var(--tan);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+    }
     .spurgeon-text {
       font-family: 'Poppins', sans-serif;
       font-style: italic;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--cream);
       line-height: 1.75;
       margin-bottom: 0.75rem;
     }
-    .spurgeon-key-verse {
-      font-size: 0.72rem;
-      color: var(--warm-gray);
-      letter-spacing: 0.06em;
-    }
     .spurgeon-link {
-      display: inline-block;
-      margin-top: 0.75rem;
-      font-size: 0.72rem;
-      color: var(--warm-gray);
+      font-size: 0.7rem;
+      color: var(--tan);
       text-decoration: underline;
     }
 
-    /* Calendar */
+    /* ── CALENDAR ── */
     .event-item {
       display: flex;
-      gap: 0.75rem;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid var(--cream);
+      gap: 0.65rem;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--border);
     }
     .event-item:last-child { border-bottom: none; }
-    .event-time {
-      font-size: 0.7rem;
-      color: var(--warm-gray);
-      min-width: 52px;
-      padding-top: 2px;
-      font-weight: 500;
-    }
-    .event-name {
-      font-size: 0.82rem;
-      color: var(--black);
-      font-weight: 500;
-    }
-    .event-sub {
-      font-size: 0.72rem;
-      color: #888;
-    }
-    .event-dress {
-      font-size: 0.65rem;
-      color: var(--sage);
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
+    .event-time { font-size: 0.68rem; color: var(--warm-gray); min-width: 50px; padding-top: 2px; font-weight: 500; }
+    .event-name { font-size: 0.8rem; color: var(--text-dark); font-weight: 500; }
+    .event-sub { font-size: 0.7rem; color: var(--text-light); }
+    .event-dress { font-size: 0.62rem; color: var(--olive); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
 
-    /* Tasks */
+    /* ── TASKS ── */
     .task-item {
       display: flex;
-      gap: 0.6rem;
-      padding: 0.55rem 0;
-      border-bottom: 1px solid var(--cream);
+      gap: 0.55rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
       align-items: flex-start;
     }
     .task-item:last-child { border-bottom: none; }
-    .task-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      margin-top: 5px;
-      flex-shrink: 0;
-    }
+    .task-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
     .dot-high { background: #c0392b; }
-    .dot-med { background: var(--warm-gray); }
-    .dot-low { background: var(--sage); }
-    .task-name { font-size: 0.82rem; color: var(--black); }
-    .task-meta { font-size: 0.7rem; color: #999; }
+    .dot-med { background: var(--tan); }
+    .dot-low { background: var(--olive); }
+    .task-name { font-size: 0.8rem; color: var(--text-dark); }
+    .task-meta { font-size: 0.68rem; color: var(--text-light); }
 
-    /* Prayer */
+    /* ── PRAYER ── */
     .prayer-item {
       padding: 0.5rem 0;
       border-bottom: 1px solid rgba(255,255,255,0.12);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--cream);
     }
     .prayer-item:last-child { border-bottom: none; }
-    .prayer-cat {
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--warm-gray);
-      margin-bottom: 0.15rem;
-    }
+    .prayer-cat { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tan); margin-bottom: 0.1rem; }
 
-    /* Health */
-    .health-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-    }
-    .health-stat {
-      text-align: center;
-      padding: 0.5rem;
-      background: rgba(255,255,255,0.06);
-      border-radius: 4px;
-    }
-    .health-val {
-      font-family: 'League Gothic', sans-serif;
-      font-size: 1.6rem;
-      color: var(--off-white);
-      line-height: 1;
-    }
-    .health-lbl {
-      font-size: 0.62rem;
-      color: var(--warm-gray);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
+    /* ── HEALTH ── */
+    .health-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.4rem; margin-top: 0.6rem; }
+    .health-stat { text-align: center; padding: 0.5rem; background: rgba(255,255,255,0.07); border-radius: 4px; }
+    .health-val { font-family: 'League Gothic', sans-serif; font-size: 1.5rem; color: var(--off-white); line-height: 1; }
+    .health-lbl { font-size: 0.58rem; color: var(--tan); letter-spacing: 0.08em; text-transform: uppercase; }
     .checkin-btn {
-      margin-top: 0.75rem;
+      margin-top: 0.6rem;
       width: 100%;
       padding: 0.5rem;
       background: transparent;
-      border: 1px solid var(--warm-gray);
+      border: 1px solid var(--tan);
       color: var(--cream);
       border-radius: 4px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-family: 'Poppins', sans-serif;
       cursor: pointer;
       letter-spacing: 0.06em;
@@ -355,79 +299,62 @@
     }
     .checkin-btn:hover { background: rgba(255,255,255,0.08); }
 
-    /* Section dividers */
-    .section-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--warm-gray);
-      margin: 1.5rem 0 0.6rem;
-      padding-bottom: 0.4rem;
-      border-bottom: 1px solid var(--cream);
-    }
-
-    /* Loading states */
-    .loading { color: #aaa; font-size: 0.8rem; font-style: italic; }
-
-    /* Footer */
+    /* ── FOOTER ── */
     .footer {
       text-align: center;
-      padding: 1.5rem;
-      font-size: 0.7rem;
+      padding: 1.5rem 1rem;
+      font-size: 0.68rem;
       color: var(--warm-gray);
       letter-spacing: 0.08em;
-      border-top: 1px solid var(--cream);
+      border-top: 1px solid var(--border);
     }
-    .footer strong { color: var(--sage); }
-
-    /* Refresh button */
+    .coram-deo {
+      font-family: 'League Gothic', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.22em;
+      color: var(--olive);
+      text-transform: uppercase;
+    }
     .refresh-btn {
       background: none;
       border: none;
       color: var(--warm-gray);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       cursor: pointer;
       text-decoration: underline;
       font-family: 'Poppins', sans-serif;
-      margin-top: 0.5rem;
+      margin-top: 0.4rem;
     }
-
-    /* Coram Deo mark */
-    .coram-deo {
-      font-family: 'League Gothic', sans-serif;
-      font-size: 0.9rem;
-      letter-spacing: 0.2em;
-      color: var(--warm-gray);
-      text-transform: uppercase;
-    }
+    .loading { color: #aaa; font-size: 0.78rem; font-style: italic; }
   </style>
 </head>
 <body>
 
 <div class="header">
   <div class="header-inner">
-    <div class="header-top">
+    <div class="logo-wrap">
+      <img src="/images/logo.png" alt="The Field's Edge">
+    </div>
+    <div class="header-bottom">
       <div>
         <div class="greeting" id="greeting">Good Morning, John-Mark</div>
-        <div class="date-line" id="date-line">Loading date...</div>
+        <div class="date-line" id="date-line">Loading...</div>
       </div>
-      <div class="reading-progress">
-        <div class="reading-day" id="reading-day-num">--</div>
-        <div class="reading-label">of 730 days</div>
+      <div class="reading-badge">
+        <div class="reading-num" id="reading-day-num">--</div>
+        <div class="reading-lbl">of 730 days</div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="capacity-banner" id="capacity-banner">
-  Low capacity day. Your COO has been notified. Prioritize rest and light tasks.
+  Low capacity day detected. COO notified. Prioritize rest.
 </div>
 
 <div class="main">
 
-  <!-- Row 1: Weather | Reading | Health -->
   <div class="grid-3">
-
     <div class="card">
       <div class="card-label">Midland, Texas</div>
       <div class="weather-temp" id="weather-temp">--°</div>
@@ -442,96 +369,59 @@
 
     <div class="card">
       <div class="card-label">Today's Reading</div>
-      <div class="reading-refs" id="reading-refs">
-        <span class="loading">Loading plan...</span>
-      </div>
+      <div class="reading-refs" id="reading-refs"><span class="loading">Loading...</span></div>
       <div class="card-body" id="reading-summary"></div>
     </div>
 
     <div class="card card-teal">
       <div class="card-label">Health Check-In</div>
       <div class="card-body" id="garmin-summary">Syncing from Garmin...</div>
-      <div class="health-grid" id="health-grid" style="display:none;">
-        <div class="health-stat">
-          <div class="health-val" id="h-energy">--</div>
-          <div class="health-lbl">Body Battery</div>
-        </div>
-        <div class="health-stat">
-          <div class="health-val" id="h-sleep">--</div>
-          <div class="health-lbl">Sleep hrs</div>
-        </div>
-        <div class="health-stat">
-          <div class="health-val" id="h-stress">--</div>
-          <div class="health-lbl">Stress</div>
-        </div>
+      <div class="health-grid" id="health-grid" style="display:none">
+        <div class="health-stat"><div class="health-val" id="h-energy">--</div><div class="health-lbl">Body Battery</div></div>
+        <div class="health-stat"><div class="health-val" id="h-sleep">--</div><div class="health-lbl">Sleep hrs</div></div>
+        <div class="health-stat"><div class="health-val" id="h-stress">--</div><div class="health-lbl">Stress</div></div>
       </div>
       <button class="checkin-btn" onclick="runHealthCheckin()">Run Morning Check-In</button>
     </div>
-
   </div>
 
-  <!-- Row 2: Spurgeon (full) | Prayer Focus -->
   <div class="grid-2">
-
     <div class="card card-teal">
       <div class="card-label">Spurgeon's Morning Devotional</div>
       <div class="card-title" id="spurgeon-title">Loading...</div>
-      <div class="spurgeon-key-verse" id="spurgeon-verse" style="margin-bottom:0.75rem;"></div>
-      <div class="spurgeon-text" id="spurgeon-text">Fetching today's reading from Morning and Evening...</div>
+      <div class="spurgeon-verse" id="spurgeon-verse"></div>
+      <div class="spurgeon-text" id="spurgeon-text">Fetching today's reading...</div>
       <a id="spurgeon-link" class="spurgeon-link" href="https://www.ccel.org/ccel/spurgeon/morneve.today.html" target="_blank">Read full devotional at CCEL</a>
     </div>
 
-    <div class="card card-sage">
+    <div class="card card-olive">
       <div class="card-label">Prayer Focus</div>
-      <div class="card-title" style="margin-bottom:0.75rem;" id="prayer-title">This Week's Intercessions</div>
-      <div id="prayer-list">
-        <div class="loading" style="color:var(--cream);">Loading prayer requests...</div>
-      </div>
-      <button class="refresh-btn" style="color:var(--cream);margin-top:0.75rem;" onclick="loadPrayer()">Refresh from Echo</button>
+      <div class="card-title" id="prayer-title">This Week's Intercessions</div>
+      <div id="prayer-list" style="margin-top:0.5rem"><div class="loading" style="color:var(--cream)">Loading...</div></div>
+      <button class="refresh-btn" style="color:var(--cream);margin-top:0.75rem" onclick="loadPrayer()">Refresh from Echo</button>
     </div>
-
   </div>
 
-  <!-- Row 3: Calendar | Tasks -->
   <div class="grid-2">
-
     <div class="card">
       <div class="card-label">Today's Calendar</div>
-      <div id="calendar-list">
-        <div class="loading">Loading events from Google Calendar...</div>
-      </div>
+      <div id="calendar-list"><div class="loading">Loading events...</div></div>
     </div>
-
     <div class="card">
       <div class="card-label">Priority Tasks</div>
-      <div id="tasks-list">
-        <div class="loading">Loading from Asana...</div>
-      </div>
+      <div id="tasks-list"><div class="loading">Loading from Asana...</div></div>
     </div>
-
-  </div>
-
-  <!-- Row 4: Family Devotion preview (Mon only or always) -->
-  <div id="family-devotion-row" style="display:none;">
-    <p class="section-label">Family Devotion This Week</p>
-    <div class="grid-2-equal" id="family-grid"></div>
   </div>
 
 </div>
 
 <div class="footer">
   <div class="coram-deo">Coram Deo</div>
-  <div style="margin-top:0.4rem;">Last updated: <span id="last-updated">--</span></div>
+  <div style="margin-top:0.3rem">Last updated: <span id="last-updated">--</span></div>
   <button class="refresh-btn" onclick="loadAll()">Refresh all data</button>
 </div>
 
 <script>
-// ─── DATE & GREETING ─────────────────────────────────────────────
-const PLAN_START = new Date('2026-01-01');
-const WEEKDAYS = [0,2,3,4,5,6]; // Sun=skip, Mon-Fri=read, Sat=read (plan is Mon-Fri only -- 2,3,4,5,6 = Mon-Fri)
-
-// Reading plan data -- weekdays only, Jan 1 2026 start
-// Format: "YYYY-MM-DD": "Reading references"
 const READING_PLAN = {
   "2026-01-01":"Gen 1; Luk 1; Ps 1","2026-01-02":"Gen 2; Ps 2",
   "2026-01-05":"Gen 3-4; Ps 3","2026-01-06":"Gen 5; John 1; Ps 4",
@@ -581,232 +471,128 @@ const READING_PLAN = {
   "2026-05-07":"Lev 3; Ps 91","2026-05-08":"Lev 4-5; John 9; Ps 92"
 };
 
-function todayKey() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth()+1).padStart(2,'0');
-  const dd = String(d.getDate()).padStart(2,'0');
-  return `${y}-${m}-${dd}`;
+function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+
+function countDays(){
+  const today=new Date();today.setHours(0,0,0,0);
+  let c=0;const cur=new Date('2026-01-01');
+  while(cur<=today){if(cur.getDay()>=1&&cur.getDay()<=5)c++;cur.setDate(cur.getDate()+1);}
+  return c;
 }
 
-function countReadingDays() {
-  const today = new Date();
-  today.setHours(0,0,0,0);
-  let count = 0;
-  const cur = new Date(PLAN_START);
-  while (cur <= today) {
-    const dow = cur.getDay();
-    if (dow >= 1 && dow <= 5) count++;
-    cur.setDate(cur.getDate()+1);
-  }
-  return count;
+function setDate(){
+  const now=new Date();
+  const h=now.getHours();
+  const g=h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening';
+  document.getElementById('greeting').textContent=g+', John-Mark';
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('date-line').textContent=days[now.getDay()]+', '+months[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear();
+  document.getElementById('reading-day-num').textContent=countDays();
+  document.getElementById('last-updated').textContent=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 }
 
-function setDateAndGreeting() {
-  const now = new Date();
-  const hour = now.getHours();
-  let greet = 'Good Morning';
-  if (hour >= 12 && hour < 17) greet = 'Good Afternoon';
-  else if (hour >= 17) greet = 'Good Evening';
-  document.getElementById('greeting').textContent = `${greet}, John-Mark`;
-
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const line = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
-  document.getElementById('date-line').textContent = line;
-
-  document.getElementById('reading-day-num').textContent = countReadingDays();
-  document.getElementById('last-updated').textContent = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-}
-
-// ─── BIBLE READING PLAN ──────────────────────────────────────────
-function buildBLBUrl(ref) {
-  // Convert "Ex 13" -> BLB search in NASB95
-  const clean = ref.trim().replace(/\s+/g,' ');
-  return `https://www.blueletterbible.org/nasb95/${encodeURIComponent(clean)}/1/`;
-}
-
-function loadReadingPlan() {
-  const key = todayKey();
-  const refs = READING_PLAN[key];
-  const container = document.getElementById('reading-refs');
-  const summary = document.getElementById('reading-summary');
-
-  if (!refs) {
-    const dow = new Date().getDay();
-    if (dow === 0 || dow === 6) {
-      container.innerHTML = '<span style="color:#888;font-size:0.8rem;font-style:italic;">Weekend rest day. No assigned reading.</span>';
-      summary.textContent = 'The Sabbath is a gift. Rest in the Lord.';
-    } else {
-      container.innerHTML = '<span style="color:#888;font-size:0.8rem;">Reading not found for today.</span>';
-    }
+function loadReading(){
+  const key=todayKey();
+  const refs=READING_PLAN[key];
+  const c=document.getElementById('reading-refs');
+  const s=document.getElementById('reading-summary');
+  if(!refs){
+    const dow=new Date().getDay();
+    c.innerHTML=dow===0||dow===6?'<span style="color:#888;font-size:0.78rem;font-style:italic">Weekend rest day.</span>':'<span style="color:#888;font-size:0.78rem">No reading found.</span>';
     return;
   }
-
-  const parts = refs.split(';').map(r => r.trim()).filter(Boolean);
-  container.innerHTML = parts.map(r =>
-    `<a class="ref-chip" href="${buildBLBUrl(r)}" target="_blank">${r}</a>`
-  ).join('');
-  summary.textContent = `${parts.length} reading${parts.length>1?'s':''} today. Open in Blue Letter Bible (NASB95).`;
+  const parts=refs.split(';').map(r=>r.trim()).filter(Boolean);
+  c.innerHTML=parts.map(r=>`<a class="ref-chip" href="https://www.blueletterbible.org/nasb95/${encodeURIComponent(r)}/1/" target="_blank">${r}</a>`).join('');
+  s.textContent=parts.length+' reading'+(parts.length>1?'s':'')+' today. Opens in Blue Letter Bible (NASB95).';
 }
 
-// ─── WEATHER ─────────────────────────────────────────────────────
-async function loadWeather() {
-  try {
-    const res = await fetch('/.netlify/functions/weather');
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-
-    document.getElementById('weather-temp').textContent = `${Math.round(data.temp)}°`;
-    document.getElementById('weather-desc').textContent = data.description;
-    document.getElementById('weather-hi').textContent = `H: ${Math.round(data.high)}°`;
-    document.getElementById('weather-lo').textContent = `L: ${Math.round(data.low)}°`;
-    document.getElementById('weather-wind').textContent = `Wind: ${data.wind} mph`;
-    document.getElementById('dress-rec').textContent = data.dressRec;
-  } catch(e) {
-    document.getElementById('weather-temp').textContent = '--°';
-    document.getElementById('weather-desc').textContent = 'Weather unavailable';
-    document.getElementById('dress-rec').textContent = 'Check calendar for dress';
+async function loadWeather(){
+  try{
+    const r=await fetch('/.netlify/functions/weather');
+    const d=await r.json();
+    if(d.error)throw new Error(d.error);
+    document.getElementById('weather-temp').textContent=Math.round(d.temp)+'°';
+    document.getElementById('weather-desc').textContent=d.description;
+    document.getElementById('weather-hi').textContent='H: '+Math.round(d.high)+'°';
+    document.getElementById('weather-lo').textContent='L: '+Math.round(d.low)+'°';
+    document.getElementById('weather-wind').textContent='Wind: '+d.wind+' mph';
+    document.getElementById('dress-rec').textContent=d.dressRec;
+  }catch(e){
+    document.getElementById('weather-temp').textContent='--°';
+    document.getElementById('weather-desc').textContent='Weather unavailable';
+    document.getElementById('dress-rec').textContent='Check calendar for dress';
   }
 }
 
-// ─── SPURGEON ────────────────────────────────────────────────────
-async function loadSpurgeon() {
-  try {
-    const res = await fetch('/.netlify/functions/spurgeon');
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-
-    document.getElementById('spurgeon-title').textContent = data.title || 'Morning Devotional';
-    document.getElementById('spurgeon-verse').textContent = data.keyVerse || '';
-    document.getElementById('spurgeon-text').textContent = data.text || '';
-  } catch(e) {
-    document.getElementById('spurgeon-title').textContent = 'Morning and Evening';
-    document.getElementById('spurgeon-text').textContent =
-      'Visit ccel.org/ccel/spurgeon/morneve.today.html for today\'s full devotional.';
+async function loadSpurgeon(){
+  try{
+    const r=await fetch('/.netlify/functions/spurgeon');
+    const d=await r.json();
+    if(d.error)throw new Error(d.error);
+    document.getElementById('spurgeon-title').textContent=d.title||'Morning Devotional';
+    document.getElementById('spurgeon-verse').textContent=d.keyVerse||'';
+    document.getElementById('spurgeon-text').textContent=d.text||'Visit CCEL for today\'s devotional.';
+  }catch(e){
+    document.getElementById('spurgeon-title').textContent='Morning and Evening';
+    document.getElementById('spurgeon-text').textContent='Visit ccel.org for today\'s Spurgeon devotional.';
   }
 }
 
-// ─── GARMIN HEALTH ───────────────────────────────────────────────
-async function loadHealth() {
-  try {
-    const res = await fetch('/.netlify/functions/garmin');
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-
-    document.getElementById('garmin-summary').style.display = 'none';
-    document.getElementById('health-grid').style.display = 'grid';
-    document.getElementById('h-energy').textContent = data.bodyBattery || '--';
-    document.getElementById('h-sleep').textContent = data.sleepHours ? data.sleepHours.toFixed(1) : '--';
-    document.getElementById('h-stress').textContent = data.avgStress || '--';
-
-    // Low capacity check
-    if (data.bodyBattery && data.bodyBattery < 30) {
-      document.getElementById('capacity-banner').classList.add('show');
-    }
-  } catch(e) {
-    document.getElementById('garmin-summary').textContent = 'Garmin data unavailable. Manual check-in below.';
+async function loadHealth(){
+  try{
+    const r=await fetch('/.netlify/functions/garmin');
+    const d=await r.json();
+    if(d.error)throw new Error(d.error);
+    document.getElementById('garmin-summary').style.display='none';
+    document.getElementById('health-grid').style.display='grid';
+    document.getElementById('h-energy').textContent=d.bodyBattery||'--';
+    document.getElementById('h-sleep').textContent=d.sleepHours?d.sleepHours.toFixed(1):'--';
+    document.getElementById('h-stress').textContent=d.avgStress||'--';
+    if(d.bodyBattery&&d.bodyBattery<30)document.getElementById('capacity-banner').classList.add('show');
+  }catch(e){
+    document.getElementById('garmin-summary').textContent='Garmin unavailable. Manual check-in below.';
   }
 }
 
-function runHealthCheckin() {
-  window.open('/.netlify/functions/health-checkin', '_blank');
+function runHealthCheckin(){alert('Health check-in coming soon.');}
+
+async function loadCalendar(){
+  try{
+    const r=await fetch('/.netlify/functions/calendar');
+    const d=await r.json();
+    const l=document.getElementById('calendar-list');
+    if(!d.events||d.events.length===0){l.innerHTML='<div class="card-body" style="color:#aaa;font-style:italic">No events today. A clear day.</div>';return;}
+    l.innerHTML=d.events.map(ev=>`<div class="event-item"><div class="event-time">${ev.time}</div><div><div class="event-name">${ev.title}</div>${ev.location?`<div class="event-sub">${ev.location}</div>`:''}${ev.dressNote?`<div class="event-dress">${ev.dressNote}</div>`:''}</div></div>`).join('');
+  }catch(e){document.getElementById('calendar-list').innerHTML='<div class="loading">Calendar unavailable.</div>';}
 }
 
-// ─── CALENDAR ────────────────────────────────────────────────────
-async function loadCalendar() {
-  try {
-    const res = await fetch('/.netlify/functions/calendar');
-    const data = await res.json();
-    const list = document.getElementById('calendar-list');
-
-    if (!data.events || data.events.length === 0) {
-      list.innerHTML = '<div class="card-body" style="color:#aaa;font-style:italic;">No events today. A clear day.</div>';
-      return;
-    }
-
-    list.innerHTML = data.events.map(ev => `
-      <div class="event-item">
-        <div class="event-time">${ev.time}</div>
-        <div>
-          <div class="event-name">${ev.title}</div>
-          ${ev.location ? `<div class="event-sub">${ev.location}</div>` : ''}
-          ${ev.dressNote ? `<div class="event-dress">${ev.dressNote}</div>` : ''}
-        </div>
-      </div>
-    `).join('');
-  } catch(e) {
-    document.getElementById('calendar-list').innerHTML =
-      '<div class="loading">Calendar unavailable. Check Google Calendar directly.</div>';
-  }
+async function loadTasks(){
+  try{
+    const r=await fetch('/.netlify/functions/tasks');
+    const d=await r.json();
+    const l=document.getElementById('tasks-list');
+    if(!d.tasks||d.tasks.length===0){l.innerHTML='<div class="card-body" style="color:#aaa;font-style:italic">No priority tasks today.</div>';return;}
+    l.innerHTML=d.tasks.slice(0,6).map(t=>`<div class="task-item"><div class="task-dot dot-${t.priority||'med'}"></div><div><div class="task-name">${t.name}</div><div class="task-meta">${t.project||''}${t.due?' · Due '+t.due:''}</div></div></div>`).join('');
+  }catch(e){document.getElementById('tasks-list').innerHTML='<div class="loading">Tasks unavailable.</div>';}
 }
 
-// ─── ASANA TASKS ─────────────────────────────────────────────────
-async function loadTasks() {
-  try {
-    const res = await fetch('/.netlify/functions/tasks');
-    const data = await res.json();
-    const list = document.getElementById('tasks-list');
-
-    if (!data.tasks || data.tasks.length === 0) {
-      list.innerHTML = '<div class="card-body" style="color:#aaa;font-style:italic;">No priority tasks today.</div>';
-      return;
-    }
-
-    list.innerHTML = data.tasks.slice(0,6).map(t => `
-      <div class="task-item">
-        <div class="task-dot dot-${t.priority || 'med'}"></div>
-        <div>
-          <div class="task-name">${t.name}</div>
-          <div class="task-meta">${t.project || ''} ${t.due ? '· Due '+t.due : ''}</div>
-        </div>
-      </div>
-    `).join('');
-  } catch(e) {
-    document.getElementById('tasks-list').innerHTML =
-      '<div class="loading">Tasks unavailable. Check Asana directly.</div>';
-  }
+async function loadPrayer(){
+  try{
+    const r=await fetch('/.netlify/functions/prayer');
+    const d=await r.json();
+    const l=document.getElementById('prayer-list');
+    if(!d.items||d.items.length===0){l.innerHTML='<div style="color:var(--cream);font-style:italic;font-size:0.78rem">No prayer requests found.</div>';return;}
+    document.getElementById('prayer-title').textContent=d.weekLabel||"This Week's Intercessions";
+    l.innerHTML=d.items.slice(0,6).map(p=>`<div class="prayer-item"><div class="prayer-cat">${p.category||'Prayer'}</div><div>${p.request}</div></div>`).join('');
+  }catch(e){document.getElementById('prayer-list').innerHTML='<div style="color:var(--cream);font-style:italic;font-size:0.78rem">Prayer feed unavailable.</div>';}
 }
 
-// ─── PRAYER ──────────────────────────────────────────────────────
-async function loadPrayer() {
-  try {
-    const res = await fetch('/.netlify/functions/prayer');
-    const data = await res.json();
-    const list = document.getElementById('prayer-list');
-    const title = document.getElementById('prayer-title');
-
-    if (!data.items || data.items.length === 0) {
-      list.innerHTML = '<div style="color:var(--cream);font-style:italic;font-size:0.8rem;">No prayer requests found. Check Echo directly.</div>';
-      return;
-    }
-
-    title.textContent = data.weekLabel || "This Week's Intercessions";
-    list.innerHTML = data.items.slice(0,6).map(p => `
-      <div class="prayer-item">
-        <div class="prayer-cat">${p.category || 'Prayer'}</div>
-        <div>${p.request}</div>
-      </div>
-    `).join('');
-  } catch(e) {
-    document.getElementById('prayer-list').innerHTML =
-      '<div style="color:var(--cream);font-style:italic;font-size:0.8rem;">Prayer feed unavailable.</div>';
-  }
-}
-
-// ─── LOAD ALL ─────────────────────────────────────────────────────
-async function loadAll() {
-  setDateAndGreeting();
-  loadReadingPlan();
-  await Promise.allSettled([
-    loadWeather(),
-    loadSpurgeon(),
-    loadHealth(),
-    loadCalendar(),
-    loadTasks(),
-    loadPrayer()
-  ]);
-  document.getElementById('last-updated').textContent = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+async function loadAll(){
+  setDate();
+  loadReading();
+  await Promise.allSettled([loadWeather(),loadSpurgeon(),loadHealth(),loadCalendar(),loadTasks(),loadPrayer()]);
+  document.getElementById('last-updated').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 }
 
 loadAll();
