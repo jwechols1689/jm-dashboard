@@ -1,16 +1,11 @@
 {
   "name": "jm-morning-dashboard",
   "version": "1.0.0",
-  "description": "John-Mark's morning briefing dashboard -- The Field's Edge",
   "private": true,
   "dependencies": {
     "@netlify/functions": "^2.8.1",
-    "googleapis": "^144.0.0"
+    "googleapis": "^144.0.0",
+    "garmin-connect": "^1.8.1"
   },
-  "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.0.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+  "engines": { "node": ">=18.0.0" }
 }
