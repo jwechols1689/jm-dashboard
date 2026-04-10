@@ -1,11 +1,1 @@
-{
-  "name": "jm-morning-dashboard",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "@netlify/functions": "^2.8.1",
-    "googleapis": "^144.0.0",
-    "@flow-js/garmin-connect": "^1.6.16"
-  },
-  "engines": { "node": ">=18.0.0" }
-}
+{"name":"jm-morning-dashboard","version":"1.0.0","private":true,"dependencies":{"@netlify/functions":"^2.8.1","googleapis":"^144.0.0","@flow-js/garmin-connect":"^1.6.16"},"engines":{"node":">=18.0.0"}}
