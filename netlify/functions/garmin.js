@@ -1,4 +1,4 @@
-const { GarminConnect } = require('garmin-connect');
+const { GarminConnect } = require('@flow-js/garmin-connect');
 
 exports.handler = async (event, context) => {
   const headers = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
